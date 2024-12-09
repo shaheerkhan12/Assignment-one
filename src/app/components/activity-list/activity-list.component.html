@@ -1,0 +1,82 @@
+<div class="">
+  <!-- Timeline Entry -->
+  <div class="flex text-center ">
+    <span class="w-[15%] mobile:text-center text-end  text-xs ">
+    
+      </span>
+    <span class="w-[5%]   flex flex-col items-center">
+      <!-- Dynamic Line -->
+      <div class="h-4 w-0.5 bg-gray-300"></div>
+      <span
+        class="w-[30px] h-[30px] flex items-center justify-center bg-gray-100 rounded-full"
+      >
+        <fa-icon
+          class="text-gray-400"
+          [icon]="getActivityIcon('list')"
+        ></fa-icon>
+      </span>
+      <div class="flex-grow w-0.5 bg-gray-300"></div>
+    </span>
+    <div class="w-[80%] m-4 ">
+      <app-activity-input></app-activity-input>
+    </div>
+  </div>
+
+  @for (activity of activities$ | async; track activity) {
+  <div class="flex ">
+    <span class="w-[15%]  text-xs mobile:text-center text-end  mt-[22px] ">
+        {{ getRelativeTime(activity.timestamp) }}
+      </span>
+    <span class="w-[5%]  flex flex-col items-center">
+      <!-- Dynamic Line -->
+      <div class="h-4 w-0.5 bg-gray-300"></div>
+      <div class="flex gap-[8px] items-center">
+     
+        <span
+          class="w-[30px] h-[30px] flex items-center justify-center bg-gray-100 rounded-full"
+        >
+          <fa-icon
+            class="text-gray-400"
+            [icon]="getActivityIcon(activity.type)"
+          ></fa-icon>
+        </span>
+      </div>
+
+      <div class="flex-grow w-0.5 bg-gray-300"></div>
+    </span>
+    <div
+      class="w-[80%] m-4 !mt-2 p-[11px] bg-[#f6f6f6] rounded-[10px] flex"
+      (mouseenter)="onMouseEnter(activity.id)"
+      (mouseleave)="onMouseLeave()"
+    >
+      <div class="w-full">
+        <p class="text-sm text-gray-600">
+          <strong class="text-[#00c6ee]">You</strong> had a
+          <strong class="lowercase">{{ activity.type!=='Chat'?activity.type:'chat' }}</strong>
+          with
+          <strong class="text-[#00c6ee]">{{ activity.user }}</strong>
+        </p>
+        <p class="text-gray-500 text-sm">{{ activity.content }}</p>
+      </div>
+      <div class="relative group inline-block self-center">
+        <button
+          (click)="deleteActivity(activity.id)"
+          class="h-[25px] w-[25px] bg-[#00c6ee] text-white opacity-0  rounded-full shadow-sm hover:bg-[#00c6ee] transition"
+          [ngClass]="{ '!opacity-100': activity.id === activityId }"
+        >
+          <fa-icon
+            size="sm"
+            class="text-gray-400 inline-flex text-white mb-[7px]"
+            [icon]="faSortDown"
+          ></fa-icon>
+        </button>
+        <div
+          class="absolute bottom-full left-1/2 transform -translate-x-1/2 translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-opacity duration-200 bg-white text-black text-sm rounded-md px-2 py-1 shadow-lg"
+        >
+          Delete
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>
